@@ -4,6 +4,7 @@ import discord
 from discord import Interaction
 from discord.ext import commands
 from discord.ui import View, Button
+from discord.ext import tasks
 
 import Config
 
@@ -34,6 +35,7 @@ class Guild(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
+        self.server_stats.start()
 
 
     @commands.Cog.listener()
@@ -47,7 +49,7 @@ class Guild(commands.Cog):
             last_msg = await ch.fetch_message(ch.last_message_id)
             await last_msg.delete()
             await ch.send(embed=verify_embed, view=Verify())
-        print("GuildHandler Cog has been loaded!")
+        print("Cog loaded: GuildHandler\n")
 
 
     @commands.Cog.listener()
@@ -68,6 +70,13 @@ class Guild(commands.Cog):
         embed.set_thumbnail(url=member.avatar)
         embed.set_footer(text=datetime.datetime.now())
         await leave.send(embed=embed)
+
+    @tasks.loop(minutes=60)
+    async def server_stats(self):
+        await self.bot.wait_until_ready()
+        current_guild = self.bot.get_guild(Config.GUILD)
+        stat_channel = self.bot.get_channel(Config.STATS_CHANNEL)
+        await stat_channel.edit(name=f"Members: {current_guild.member_count}")
 
 
 

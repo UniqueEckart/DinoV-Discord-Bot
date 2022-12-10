@@ -107,7 +107,7 @@ class Ticket(commands.Cog):
             last_msg = await support_channel.fetch_message(support_channel.last_message_id)
             await last_msg.delete()
             await support_channel.send("Ticket Support", view=mysupport)
-        print("Ticket Cog has been loaded")
+        print("Cog loaded: Tickets\n")
 
 
 async def setup(bot):

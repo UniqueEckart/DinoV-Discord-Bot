@@ -11,7 +11,7 @@ class Dev(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        print("Dev Cog has been loaded!")
+        print("Cog Loaded: Dev\n")
 
     @commands.command()
     async def sync(self, ctx):
